@@ -2,11 +2,15 @@ import { useGSAP } from '@gsap/react'
 import { SplitText } from 'gsap/SplitText';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { useRef } from 'react';
+import { useMediaQuery } from 'react-responsive';
 
-// Register the plugins
+
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const Hero = () => {
+  const videoRef = useRef();
+  const isMobile = useMediaQuery({ maxWidth: 767 })
     useGSAP(() => {
         
         gsap.set('.right-leaf', { y: 0 });
@@ -60,19 +64,40 @@ const Hero = () => {
         });
         
         
-        const tl = gsap.timeline({
+        const leafTl = gsap.timeline({
             scrollTrigger: {
               trigger: '#hero',
               start: 'top top',
               end: 'bottom top',
-              scrub: true, 
-              
+              scrub: true,
+              id: 'leaf-animation'
             }
         });
         
+        leafTl.to('.right-leaf', { y: 200, ease: 'none' }, 0);
+        leafTl.to('.left-leaf', { y: -200, ease: 'none' }, 0);
         
-        tl.to('.right-leaf', { y: 200, ease: 'none' }, 0);
-        tl.to('.left-leaf', { y: -200, ease: 'none' }, 0);
+  
+        const startValue = isMobile ? 'top 50%' : 'center 60%';
+        const endValue = isMobile ? 'top 120%' : 'bottom top';
+        
+        
+        const videoTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: 'video',
+            start: startValue, 
+            end: endValue,
+            scrub: true,
+            pin: true,
+          }
+        });
+       videoRef.current.onloadedmetadata = () => {
+        videoTl.to(videoRef.current, {
+         currentTime: videoRef.current.duration 
+        })
+       }
+        
+       
     }, []);
   return (
     <>
@@ -126,6 +151,15 @@ const Hero = () => {
          </div>
 
     </section>
+    <div className='video'>
+      <video 
+      ref={videoRef}
+      src="/videos/output.mp4"
+      muted
+      playsInline
+      preload='auto'
+      />
+    </div>
     </>
   );
 };
