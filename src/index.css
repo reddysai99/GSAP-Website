@@ -317,22 +317,55 @@ body {
             }
         }
 
-        .cocktail {
-            @apply flex-center mt-10;
-
-            img {
-                @apply object-contain h-[60vh];
+        .cocktail-carousel {
+            @apply flex justify-center items-center mt-10 w-full relative overflow-visible;
+            
+            .prev-cocktail, .next-cocktail {
+                @apply absolute z-10 hidden md:block;
+                will-change: transform, opacity;
+            }
+            
+            .prev-cocktail {
+                @apply -left-10 transform -translate-x-1/4;
+                
+                img {
+                    @apply object-contain h-[40vh] transition-all duration-300;
+                    will-change: transform, opacity;
+                }
+            }
+            
+            .current-cocktail {
+                @apply z-20;
+                will-change: transform, opacity;
+                
+                img {
+                    @apply object-contain h-[60vh] transition-all duration-300;
+                    will-change: transform, opacity;
+                }
+            }
+            
+            .next-cocktail {
+                @apply -right-10 transform translate-x-1/4;
+                
+                img {
+                    @apply object-contain h-[40vh] transition-all duration-300;
+                    will-change: transform, opacity;
+                }
             }
         }
 
         .recipe {
-            @apply flex max-md:flex-col gap-10 md:items-center justify-between w-full lg:absolute bottom-0;
+            @apply flex max-md:flex-col gap-10 md:items-center justify-between w-full relative mt-10 mb-20 z-20;
 
             .info {
-                @apply space-y-4 lg:translate-y-20;
+                @apply space-y-4;
+
+                p:first-child {
+                    @apply text-white/80 text-lg;
+                }
 
                 #title {
-                    @apply font-modern-negra md:text-6xl text-3xl text-yellow max-w-40;
+                    @apply font-modern-negra md:text-6xl text-3xl text-yellow max-w-xs;
                 }
             }
 
@@ -340,11 +373,11 @@ body {
                 @apply space-y-5 md:max-w-md text-left;
 
                 h2 {
-                    @apply md:text-5xl text-3xl font-serif;
+                    @apply md:text-5xl text-3xl font-serif text-white;
                 }
 
                 p {
-                    @apply md:text-lg pe-5;
+                    @apply md:text-lg pe-5 text-white/80;
                 }
             }
         }
